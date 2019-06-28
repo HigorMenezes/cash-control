@@ -1,7 +1,5 @@
 require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` });
-const winstonUtil = require('../utils/winstonUtil');
-
-const logger = winstonUtil('info', 'config');
+const logger = require('../utils/winstonUtil')('info', 'config');
 
 const appConfig = {
   port: process.env.APP_PORT || 3030,

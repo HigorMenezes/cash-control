@@ -1,7 +1,5 @@
 require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` });
-const winstonUtil = require('../utils/winstonUtil');
-
-const logger = winstonUtil('info', 'config');
+const logger = require('../utils/winstonUtil')('info', 'config');
 
 const basicAuthConfig = {
   username: process.env.BASIC_AUTH_USERNAME || 'admin',

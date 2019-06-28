@@ -1,12 +1,11 @@
-const winstonUtil = require('../../utils/winstonUtil');
-
-const logger = winstonUtil('info', 'defaultRoute');
+const statusRoute = require('./statusRoute');
 
 const routes = app => {
   app.get('/', (req, res) => {
-    logger.info('Server is running');
-    res.status(200).send('Server is running');
+    res.send('Server is running');
   });
+
+  statusRoute(app);
 };
 
 module.exports = routes;

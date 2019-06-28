@@ -1,8 +1,6 @@
 const app = require('./app');
 const appConfig = require('./configs/appConfig');
-const winstonUtil = require('./utils/winstonUtil');
-
-const logger = winstonUtil('info', 'index');
+const logger = require('./utils/winstonUtil')('info', 'index');
 
 app.listen(appConfig.port, () => {
   logger.info(
