@@ -1,7 +1,4 @@
 require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` });
-const winstonUtil = require('../utils/winstonUtil');
-
-const logger = winstonUtil('info', 'config');
 
 const dbConfig = {
   host: process.env.DB_HOST || '127.0.0.1',
@@ -17,5 +14,4 @@ const dbConfig = {
     underscoredAll: true,
   },
 };
-logger.info(`dbConfig - env: ${process.env.NODE_ENV}`, dbConfig);
 module.exports = dbConfig;
