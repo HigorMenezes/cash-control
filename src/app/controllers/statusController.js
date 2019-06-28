@@ -5,27 +5,23 @@ const statusController = {
   create: async (req, res) => {
     try {
       if (req.body && req.body.id && req.body.name && req.body.description) {
-        let status = {};
+        const { id, name, description } = req.body;
         try {
-          status = await Status.create(req.body);
+          const status = await Status.create({ id, name, description });
+
+          return res.send({
+            code: 201,
+            massage: 'Status created with success',
+            content: { status },
+          });
         } catch (err) {
           logger.error(err);
           return res.send({
             code: 400,
             massage: 'Bad request',
-            content: {
-              err,
-            },
+            content: { err },
           });
         }
-
-        return res.send({
-          code: 201,
-          massage: 'Status created with success',
-          content: {
-            status,
-          },
-        });
       }
 
       return res.send({
@@ -37,9 +33,7 @@ const statusController = {
       return res.send({
         code: 500,
         message: 'Error while creating status',
-        content: {
-          err,
-        },
+        content: { err },
       });
     }
   },
@@ -50,51 +44,37 @@ const statusController = {
       return res.send({
         code: 200,
         message: 'Status recovered with success',
-        content: {
-          status,
-        },
+        content: { status },
       });
     } catch (err) {
       logger.error(err);
       return res.send({
         code: 500,
         message: 'Error while retrieving status',
-        content: {
-          err,
-        },
+        content: { err },
       });
     }
   },
   listById: async (req, res) => {
     try {
       if (req.params && req.params.id) {
-        const statusId = req.params.id;
+        const { id } = req.params;
 
-        let status = {};
         try {
-          status = await Status.findOne({
-            where: {
-              id: statusId,
-            },
+          const status = await Status.findOne({ where: { id } });
+          return res.send({
+            code: 200,
+            message: 'Status recovered with success',
+            content: { status },
           });
         } catch (err) {
           logger.error(err);
           return res.send({
             code: 400,
             massage: 'Bad request',
-            content: {
-              err,
-            },
+            content: { err },
           });
         }
-
-        return res.send({
-          code: 200,
-          message: 'Status recovered with success',
-          content: {
-            status,
-          },
-        });
       }
 
       return res.send({
@@ -106,9 +86,7 @@ const statusController = {
       return res.send({
         code: 500,
         message: 'Error while retrieving status',
-        content: {
-          err,
-        },
+        content: { err },
       });
     }
   },
@@ -119,39 +97,27 @@ const statusController = {
         req.params.id &&
         (req.body && req.body.id && req.body.name && req.body.description)
       ) {
-        const statusId = req.params.id;
+        const { id } = req.params;
+        const { name, description } = req.body;
 
-        let status = {};
         try {
-          [status] = await Status.update(
-            {
-              ...req.body,
-              id: req.params.id,
-            },
-            {
-              where: {
-                id: statusId,
-              },
-            },
+          const [status] = await Status.update(
+            { id, name, description },
+            { where: { id } },
           );
+          return res.send({
+            code: 200,
+            message: 'Status edited with success',
+            content: { status },
+          });
         } catch (err) {
           logger.error(err);
           return res.send({
             code: 400,
             massage: 'Bad request',
-            content: {
-              err,
-            },
+            content: { err },
           });
         }
-
-        return res.send({
-          code: 200,
-          message: 'Status edited with success',
-          content: {
-            status,
-          },
-        });
       }
 
       return res.send({
@@ -163,9 +129,7 @@ const statusController = {
       return res.send({
         code: 500,
         message: 'Error while retrieving status',
-        content: {
-          err,
-        },
+        content: { err },
       });
     }
   },
