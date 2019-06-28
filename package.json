@@ -1,0 +1,39 @@
+{
+  "name": "cash-control",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/HigorMenezes/cash-control.git",
+  "author": "Higor Menezes <higormenezes1996@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "NODE_ENV=production node src/index.js",
+    "dev": "NODE_ENV=development nodemon src/index.js",
+    "test": "NODE_ENV=test jest",
+    "prettier:fix": "prettier --config ./.prettierrc.json --write  './src/**/*.*'"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
+    "file-stream-rotator": "^0.4.1",
+    "helmet": "^3.18.0",
+    "morgan": "^1.9.1",
+    "sequelize": "^5.8.12",
+    "sqlite": "^3.0.3",
+    "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^3.9.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "faker": "^4.1.0",
+    "jest": "^24.8.0",
+    "nodemon": "^1.19.1",
+    "prettier": "^1.18.2",
+    "sequelize-cli": "^5.5.0",
+    "supertest": "^4.0.2"
+  }
+}
