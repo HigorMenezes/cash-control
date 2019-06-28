@@ -7,11 +7,12 @@ const morganUtil = (
 ) => {
   return morgan(format, {
     stream: fileRotate.getStream({
-      filename: `logs/access/${logConfig.defaultFilename}-%DATE%.log`,
+      filename: `logs/access/${logConfig.defaultFilename}.%DATE%.log`,
       size: logConfig.maxSize,
       max_logs: logConfig.maxFiles,
       verbose: false,
       date_format: 'YYYY-MM-DD',
+      audit_file: `logs/access/${logConfig.defaultFilename}.audit.log`,
     }),
   });
 };
