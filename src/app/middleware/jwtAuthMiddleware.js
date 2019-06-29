@@ -12,20 +12,20 @@ const jwtAuthMiddleware = async (req, res, next) => {
         req.userId = decoded.id;
       } catch (err) {
         logger.error('Invalid token', err);
-        return res.status(401).send({
+        return res.send({
           code: 401,
           message: 'Invalid token',
         });
       }
     } else {
-      return res.status(401).send({
+      return res.send({
         code: 401,
         message: 'Token not provided',
       });
     }
   } catch (err) {
     logger.error('Error during token validation', err);
-    return res.status(500).send({
+    return res.send({
       code: 500,
       message: 'Error during token validation',
     });

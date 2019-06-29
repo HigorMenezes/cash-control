@@ -28,19 +28,23 @@ describe('User - Create', () => {
     const response = await request(app)
       .post('/users')
       .send({
-        name: 'Higor',
-        lastName: 'Menezes',
-        email: 'higor@2menezes.com',
+        name: 'Jose',
+        lastName: 'Maria',
+        email: 'jose@maria.com',
         password: '123',
         statusId: 100,
       })
       .auth('admin', 'admin');
-
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('content');
     expect(response.body.code).toBe(201);
-    if (response.body && response.body.users && response.body.users.id) {
-      await User.destroy({ where: { id: response.body.users.id } });
+    if (
+      response.body &&
+      response.body.content &&
+      response.body.content.users &&
+      response.body.content.users.id
+    ) {
+      await User.destroy({ where: { id: response.body.content.users.id } });
     }
   });
 
@@ -48,17 +52,22 @@ describe('User - Create', () => {
     const response = await request(app)
       .post('/users')
       .send({
-        name: 'Higor',
-        lastName: 'Menezes',
-        email: 'higor.menezes@2.com',
+        name: 'Maria',
+        lastName: 'Jose',
+        email: 'Maria@Jose.com',
         password: '123',
         statusId: 100,
       });
 
     expect(response.status).toBe(200);
     expect(response.body.code).toBe(401);
-    if (response.body && response.body.users && response.body.users.id) {
-      await User.destroy({ where: { id: response.body.users.id } });
+    if (
+      response.body &&
+      response.body.content &&
+      response.body.content.users &&
+      response.body.content.users.id
+    ) {
+      await User.destroy({ where: { id: response.body.content.users.id } });
     }
   });
 
@@ -66,8 +75,8 @@ describe('User - Create', () => {
     const response = await request(app)
       .post('/users')
       .send({
-        name: 'Higor',
-        lastName: 'Menezes',
+        name: 'Maria',
+        lastName: 'Jose',
         password: '123',
         statusId: 100,
       })
@@ -75,8 +84,13 @@ describe('User - Create', () => {
 
     expect(response.status).toBe(200);
     expect(response.body.code).toBe(400);
-    if (response.body && response.body.users && response.body.users.id) {
-      await User.destroy({ where: { id: response.body.users.id } });
+    if (
+      response.body &&
+      response.body.content &&
+      response.body.content.users &&
+      response.body.content.users.id
+    ) {
+      await User.destroy({ where: { id: response.body.content.users.id } });
     }
   });
 });
@@ -87,9 +101,9 @@ describe('User - edit', () => {
     const response = await request(app)
       .patch(`/users/${user.id}`)
       .send({
-        name: 'Higor',
-        lastName: 'Menezes',
-        email: 'higor@aparecido.com',
+        name: 'Joao',
+        lastName: 'John',
+        email: 'joao@john.com',
         password: '123',
         statusId: 300,
       })
@@ -104,9 +118,9 @@ describe('User - edit', () => {
     const response = await request(app)
       .patch(`/users/${user.id}`)
       .send({
-        name: 'Higor',
-        lastName: 'Menezes',
-        email: 'higor@aparecido.com',
+        name: 'John',
+        lastName: 'Joao',
+        email: 'john@joao.com',
         password: '123',
         statusId: 100,
       });
@@ -121,9 +135,9 @@ describe('User - edit', () => {
     const response = await request(app)
       .patch(`/users/${user.id}`)
       .send({
-        name: 'Higor',
-        lastName: 'Menezes',
-        email: 'higor@aparecido.com',
+        name: 'Mario',
+        lastName: 'Luigi',
+        email: 'mario@luigi.com',
         password: '123',
       })
       .auth('admin', 'admin');
