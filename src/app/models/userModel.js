@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcryptUtil = require('../../utils/bcryptUtil');
 
 module.exports = (sequelize, DataType) => {
   const User = sequelize.define(
@@ -16,7 +16,7 @@ module.exports = (sequelize, DataType) => {
         beforeSave: async user => {
           const newUser = user;
           if (user.password) {
-            newUser.passwordHash = await bcrypt.hash(user.password, 8);
+            newUser.passwordHash = await bcryptUtil.hash(user.password);
           }
           return newUser;
         },
@@ -25,7 +25,7 @@ module.exports = (sequelize, DataType) => {
   );
 
   User.associate = models => {
-    User.hasOne(models.Status);
+    User.belongsTo(models.Status);
   };
 
   return User;

@@ -15,7 +15,7 @@ const statusController = {
             content: { status },
           });
         } catch (err) {
-          logger.error(err);
+          logger.error('Create - Bad request', err);
           return res.send({
             code: 400,
             massage: 'Bad request',
@@ -29,10 +29,10 @@ const statusController = {
         massage: 'Bad request',
       });
     } catch (err) {
-      logger.error(err);
+      logger.error('Create - Error during status creating', err);
       return res.send({
         code: 500,
-        message: 'Error during creating status',
+        message: 'Error during status creating',
         content: { err },
       });
     }
@@ -47,7 +47,7 @@ const statusController = {
         content: { status },
       });
     } catch (err) {
-      logger.error(err);
+      logger.error('ListAll - Error during get status', err);
       return res.send({
         code: 500,
         message: 'Error during get status',
@@ -68,7 +68,7 @@ const statusController = {
             content: { status },
           });
         } catch (err) {
-          logger.error(err);
+          logger.error('ListById - Bad request', err);
           return res.send({
             code: 400,
             massage: 'Bad request',
@@ -82,7 +82,7 @@ const statusController = {
         message: 'Bad request',
       });
     } catch (err) {
-      logger.error(err);
+      logger.error('ListById - Error during get status', err);
       return res.send({
         code: 500,
         message: 'Error during get status',
@@ -95,23 +95,21 @@ const statusController = {
       if (
         req.params &&
         req.params.id &&
-        (req.body && req.body.id && req.body.name && req.body.description)
+        (req.body && req.body.name && req.body.description)
       ) {
         const { id } = req.params;
         const { name, description } = req.body;
 
         try {
-          const [status] = await Status.update(
-            { id, name, description },
-            { where: { id } },
-          );
+          await Status.update({ id, name, description }, { where: { id } });
+          const status = await Status.findOne({ where: { id } });
           return res.send({
             code: 200,
             message: 'Status edited with success',
             content: { status },
           });
         } catch (err) {
-          logger.error(err);
+          logger.error('Edit - Bad request', err);
           return res.send({
             code: 400,
             massage: 'Bad request',
@@ -125,7 +123,7 @@ const statusController = {
         message: 'Bad request',
       });
     } catch (err) {
-      logger.error(err);
+      logger.error('Edit - Error during status editing', err);
       return res.send({
         code: 500,
         message: 'Error during status editing',

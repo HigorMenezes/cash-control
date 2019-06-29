@@ -94,7 +94,6 @@ describe('Status - edit', () => {
     const response = await request(app)
       .patch('/status/100')
       .send({
-        name: 'active',
         description: 'indicates that is active',
       })
       .auth('admin', 'admin');

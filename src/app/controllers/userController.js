@@ -14,21 +14,22 @@ const userController = {
       ) {
         const { name, lastName, email, password, statusId } = req.body;
         try {
-          const user = await User.create({
+          const users = await User.create({
             name,
             lastName,
             email,
             password,
             statusId,
           });
+          delete users.dataValues.passwordHash;
 
           return res.send({
             code: 201,
             massage: 'User created with success',
-            content: { user },
+            content: { users },
           });
         } catch (err) {
-          logger.error(err);
+          logger.error('Create - Bad request', err);
           return res.send({
             code: 400,
             massage: 'Bad request',
@@ -42,7 +43,7 @@ const userController = {
         massage: 'Bad request',
       });
     } catch (err) {
-      logger.error(err);
+      logger.error('Create - Error during user creating', err);
       return res.send({
         code: 500,
         message: 'Error during user creating',
@@ -52,7 +53,9 @@ const userController = {
   },
   listAll: async (req, res) => {
     try {
-      const users = await User.findAll();
+      const users = await User.findAll({
+        attributes: { exclude: ['passwordHash'] },
+      });
 
       return res.send({
         code: 200,
@@ -60,7 +63,7 @@ const userController = {
         content: { users },
       });
     } catch (err) {
-      logger.error(err);
+      logger.error('ListAll - Error during retrieving users', err);
       return res.send({
         code: 500,
         message: 'Error during retrieving users',
@@ -74,14 +77,17 @@ const userController = {
         const { id } = req.params;
 
         try {
-          const users = await User.findOne({ where: { id } });
+          const users = await User.findOne({
+            where: { id },
+            attributes: { exclude: ['passwordHash'] },
+          });
           return res.send({
             code: 200,
             message: 'User recovered with success',
             content: { users },
           });
         } catch (err) {
-          logger.error(err);
+          logger.error('ListById - Bad request', err);
           return res.send({
             code: 400,
             massage: 'Bad request',
@@ -95,7 +101,7 @@ const userController = {
         message: 'Bad request',
       });
     } catch (err) {
-      logger.error(err);
+      logger.error('ListById - Error while retrieving user', err);
       return res.send({
         code: 500,
         message: 'Error while retrieving user',
@@ -118,7 +124,7 @@ const userController = {
         const { id } = req.params;
         const { name, lastName, email, password, statusId } = req.body;
         try {
-          const [user] = await User.update(
+          await User.update(
             {
               name,
               lastName,
@@ -128,14 +134,18 @@ const userController = {
             },
             { where: { id } },
           );
+          const users = await User.findOne({
+            where: { id },
+            attributes: { exclude: ['passwordHash'] },
+          });
 
           return res.send({
-            code: 201,
+            code: 200,
             massage: 'User created with success',
-            content: { user },
+            content: { users },
           });
         } catch (err) {
-          logger.error(err);
+          logger.error('Edit - Bad request', err);
           return res.send({
             code: 400,
             massage: 'Bad request',
@@ -149,7 +159,7 @@ const userController = {
         massage: 'Bad request',
       });
     } catch (err) {
-      logger.error(err);
+      logger.error('Edit - Error while editing user', err);
       return res.send({
         code: 500,
         message: 'Error while editing user',

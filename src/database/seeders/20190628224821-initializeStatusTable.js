@@ -30,26 +30,6 @@ module.exports = {
   },
 
   down: queryInterface => {
-    return queryInterface.bulkDelete(
-      'status',
-      [
-        {
-          id: 100,
-          name: 'active',
-          description: 'indicates that is active',
-        },
-        {
-          id: 200,
-          name: 'pending',
-          description: 'indicates that is pending',
-        },
-        {
-          id: 300,
-          name: 'inactive',
-          description: 'indicates that is inactive',
-        },
-      ],
-      {},
-    );
+    return queryInterface.bulkDelete('status', null, {});
   },
 };
