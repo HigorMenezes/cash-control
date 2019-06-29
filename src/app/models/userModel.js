@@ -1,4 +1,5 @@
 const bcryptUtil = require('../../utils/bcryptUtil');
+const jwtUtil = require('../../utils/jwtUtil');
 
 module.exports = (sequelize, DataType) => {
   const User = sequelize.define(
@@ -26,6 +27,16 @@ module.exports = (sequelize, DataType) => {
 
   User.associate = models => {
     User.belongsTo(models.Status);
+  };
+
+  User.prototype.checkPassword = async function checkPassword(password) {
+    const result = await bcryptUtil.compare(password, this.passwordHash);
+    return result;
+  };
+
+  User.prototype.generateToken = function generateToken() {
+    const result = jwtUtil.sign(this.id);
+    return result;
   };
 
   return User;

@@ -19,6 +19,9 @@ describe('User - List', () => {
 });
 
 describe('User - Create', () => {
+  beforeEach(async () => {
+    await User.destroy({ truncate: true });
+  });
   it('should create a new User when send a post to endpoint /users with valid request and auth', async () => {
     const response = await request(app)
       .post('/users')
