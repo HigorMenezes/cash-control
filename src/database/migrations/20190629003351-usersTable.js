@@ -24,12 +24,12 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      status: {
+      status_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: 300,
-        reference: {
-          model: 'Status',
+        references: {
+          model: 'status',
           key: 'id',
         },
         onUpdate: 'CASCADE',

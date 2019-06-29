@@ -1,5 +1,5 @@
 const statusModel = (Sequelize, DataType) => {
-  const status = Sequelize.define(
+  const Status = Sequelize.define(
     'Status',
     {
       name: DataType.STRING,
@@ -10,7 +10,7 @@ const statusModel = (Sequelize, DataType) => {
     },
   );
 
-  return status;
+  return Status;
 };
 
 module.exports = statusModel;
