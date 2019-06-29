@@ -1,34 +1,36 @@
 const request = require('supertest');
 const app = require('../../src/app');
 const { User } = require('../../src/app/models');
+const factory = require('../factories');
 
 describe('User - List', () => {
   it('should return property content on body when search for all users', async () => {
+    const user = await factory.create('User');
     const response = await request(app).get('/users');
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('content');
     expect(response.body.code).toBe(200);
+    await User.destroy({ where: { id: user.id } });
   });
 
   it('should return property content on body when search for one user', async () => {
-    const response = await request(app).get('/users/1');
+    const user = await factory.create('User');
+    const response = await request(app).get(`/users/${user.id}`);
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('content');
     expect(response.body.code).toBe(200);
+    await User.destroy({ where: { id: user.id } });
   });
 });
 
 describe('User - Create', () => {
-  beforeEach(async () => {
-    await User.destroy({ truncate: true });
-  });
   it('should create a new User when send a post to endpoint /users with valid request and auth', async () => {
     const response = await request(app)
       .post('/users')
       .send({
         name: 'Higor',
         lastName: 'Menezes',
-        email: 'higor@menezes.com',
+        email: 'higor@2menezes.com',
         password: '123',
         statusId: 100,
       })
@@ -37,7 +39,9 @@ describe('User - Create', () => {
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('content');
     expect(response.body.code).toBe(201);
-    User.destroy({ where: { id: response.body.content.users.id } });
+    if (response.body && response.body.users && response.body.users.id) {
+      await User.destroy({ where: { id: response.body.users.id } });
+    }
   });
 
   it('should not create a new User when send a post to endpoint /users with valid request but invalid auth', async () => {
@@ -46,13 +50,16 @@ describe('User - Create', () => {
       .send({
         name: 'Higor',
         lastName: 'Menezes',
-        email: 'higor@menezes.com',
+        email: 'higor.menezes@2.com',
         password: '123',
         statusId: 100,
       });
 
     expect(response.status).toBe(200);
     expect(response.body.code).toBe(401);
+    if (response.body && response.body.users && response.body.users.id) {
+      await User.destroy({ where: { id: response.body.users.id } });
+    }
   });
 
   it('should not create a new User when send a post to endpoint /users with invalid request', async () => {
@@ -68,13 +75,17 @@ describe('User - Create', () => {
 
     expect(response.status).toBe(200);
     expect(response.body.code).toBe(400);
+    if (response.body && response.body.users && response.body.users.id) {
+      await User.destroy({ where: { id: response.body.users.id } });
+    }
   });
 });
 
 describe('User - edit', () => {
   it('should edit a user when valid request and auth', async () => {
+    const user = await factory.create('User');
     const response = await request(app)
-      .patch('/users/1')
+      .patch(`/users/${user.id}`)
       .send({
         name: 'Higor',
         lastName: 'Menezes',
@@ -83,14 +94,15 @@ describe('User - edit', () => {
         statusId: 300,
       })
       .auth('admin', 'admin');
-
     expect(response.status).toBe(200);
     expect(response.body.code).toBe(200);
+    await User.destroy({ where: { id: user.id } });
   });
 
   it('should not edit a user when invalid auth', async () => {
+    const user = await factory.create('User');
     const response = await request(app)
-      .patch('/users/1')
+      .patch(`/users/${user.id}`)
       .send({
         name: 'Higor',
         lastName: 'Menezes',
@@ -101,11 +113,13 @@ describe('User - edit', () => {
 
     expect(response.status).toBe(200);
     expect(response.body.code).toBe(401);
+    await User.destroy({ where: { id: user.id } });
   });
 
   it('should not edit a user when invalid request', async () => {
+    const user = await factory.create('User');
     const response = await request(app)
-      .patch('/users/1')
+      .patch(`/users/${user.id}`)
       .send({
         name: 'Higor',
         lastName: 'Menezes',
@@ -116,5 +130,6 @@ describe('User - edit', () => {
 
     expect(response.status).toBe(200);
     expect(response.body.code).toBe(400);
+    await User.destroy({ where: { id: user.id } });
   });
 });

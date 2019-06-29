@@ -26,7 +26,7 @@ module.exports = (sequelize, DataType) => {
   );
 
   User.associate = models => {
-    User.belongsTo(models.Status);
+    User.belongsTo(models.Status, { foreignKey: 'statusId', targetKey: 'id' });
   };
 
   User.prototype.checkPassword = async function checkPassword(password) {

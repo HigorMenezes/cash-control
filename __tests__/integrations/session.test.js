@@ -1,19 +1,12 @@
 const request = require('supertest');
 const app = require('../../src/app');
+const factory = require('../factories');
 const { User } = require('../../src/app/models');
 
 describe('Session - store', () => {
-  beforeEach(async () => {
-    await User.destroy({ truncate: true });
-  });
-
   it('should authenticate with valid credentials', async () => {
-    const user = await User.create({
-      name: 'Higor',
-      lastName: 'Menezes',
-      email: 'higor@menezes.com',
+    const user = await factory.create('User', {
       password: '123',
-      statusId: 100,
     });
 
     const response = await request(app)
@@ -22,16 +15,11 @@ describe('Session - store', () => {
     expect(response.status).toBe(200);
     expect(response.body.code).toBe(200);
     expect(response.body.content).toHaveProperty('token');
+    await User.destroy({ where: { id: user.id } });
   });
 
   it('should not authenticate without credentials', async () => {
-    const user = await User.create({
-      name: 'Higor',
-      lastName: 'Menezes',
-      email: 'higor@menezes.com',
-      password: '123',
-      statusId: 100,
-    });
+    const user = await factory.create('User');
 
     const response = await request(app)
       .post('/session')
@@ -39,16 +27,11 @@ describe('Session - store', () => {
 
     expect(response.status).toBe(200);
     expect(response.body.code).toBe(400);
+    await User.destroy({ where: { id: user.id } });
   });
 
   it('should not authenticate with invalid credentials, password incorrect', async () => {
-    const user = await User.create({
-      name: 'Higor',
-      lastName: 'Menezes',
-      email: 'higor@menezes.com',
-      password: '123',
-      statusId: 100,
-    });
+    const user = await factory.create('User', { password: '123' });
 
     const response = await request(app)
       .post('/session')
@@ -56,22 +39,21 @@ describe('Session - store', () => {
 
     expect(response.status).toBe(200);
     expect(response.body.code).toBe(401);
+    await User.destroy({ where: { id: user.id } });
   });
 
   it('should not authenticate with invalid credentials, email incorrect', async () => {
-    const user = await User.create({
-      name: 'Higor',
-      lastName: 'Menezes',
-      email: 'higor@menezes.com',
-      password: '123',
-      statusId: 100,
-    });
+    const user = await factory.create('User', { email: 'higor@aparecido.com' });
 
     const response = await request(app)
       .post('/session')
-      .send({ email: 'higor@menezes.com.br', password: user.password });
+      .send({
+        email: 'higor.menezes@aparecido.com.br',
+        password: user.password,
+      });
 
     expect(response.status).toBe(200);
     expect(response.body.code).toBe(404);
+    await User.destroy({ where: { id: user.id } });
   });
 });
