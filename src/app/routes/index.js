@@ -1,4 +1,5 @@
 const statusRoute = require('./statusRoute');
+const userRoute = require('./userRoute');
 
 const routes = app => {
   app.get('/', (req, res) => {
@@ -6,6 +7,7 @@ const routes = app => {
   });
 
   statusRoute(app);
+  userRoute(app);
 };
 
 module.exports = routes;

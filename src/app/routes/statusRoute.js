@@ -1,4 +1,4 @@
-const basicAuthMiddleware = require('../middlewares/basicAuthMiddleware');
+const basicAuthMiddleware = require('../middleware/basicAuthMiddleware');
 const statusController = require('../controllers/statusController');
 
 const statusRoute = app => {

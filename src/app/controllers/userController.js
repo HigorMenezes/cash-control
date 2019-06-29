@@ -1,18 +1,31 @@
-const { Status } = require('../models');
-const logger = require('../../utils/winstonUtil')('info', 'statusController');
+const { User } = require('../models');
+const logger = require('../../utils/winstonUtil')('info', 'userController');
 
-const statusController = {
+const userController = {
   create: async (req, res) => {
     try {
-      if (req.body && req.body.id && req.body.name && req.body.description) {
-        const { id, name, description } = req.body;
+      if (
+        req.body &&
+        req.body.name &&
+        req.body.lastName &&
+        req.body.email &&
+        req.body.password &&
+        req.body.statusId
+      ) {
+        const { name, lastName, email, password, statusId } = req.body;
         try {
-          const status = await Status.create({ id, name, description });
+          const user = await User.create({
+            name,
+            lastName,
+            email,
+            password,
+            statusId,
+          });
 
           return res.send({
             code: 201,
-            massage: 'Status created with success',
-            content: { status },
+            massage: 'User created with success',
+            content: { user },
           });
         } catch (err) {
           logger.error(err);
@@ -32,25 +45,25 @@ const statusController = {
       logger.error(err);
       return res.send({
         code: 500,
-        message: 'Error during creating status',
+        message: 'Error during user creating',
         content: { err },
       });
     }
   },
   listAll: async (req, res) => {
     try {
-      const status = await Status.findAll();
+      const users = await User.findAll();
 
       return res.send({
         code: 200,
-        message: 'Status recovered with success',
-        content: { status },
+        message: 'Users recovered with success',
+        content: { users },
       });
     } catch (err) {
       logger.error(err);
       return res.send({
         code: 500,
-        message: 'Error during get status',
+        message: 'Error during retrieving users',
         content: { err },
       });
     }
@@ -61,11 +74,11 @@ const statusController = {
         const { id } = req.params;
 
         try {
-          const status = await Status.findOne({ where: { id } });
+          const users = await User.findOne({ where: { id } });
           return res.send({
             code: 200,
-            message: 'Status recovered with success',
-            content: { status },
+            message: 'User recovered with success',
+            content: { users },
           });
         } catch (err) {
           logger.error(err);
@@ -85,7 +98,7 @@ const statusController = {
       logger.error(err);
       return res.send({
         code: 500,
-        message: 'Error during get status',
+        message: 'Error while retrieving user',
         content: { err },
       });
     }
@@ -95,20 +108,31 @@ const statusController = {
       if (
         req.params &&
         req.params.id &&
-        (req.body && req.body.id && req.body.name && req.body.description)
+        req.body &&
+        req.body.name &&
+        req.body.lastName &&
+        req.body.email &&
+        req.body.password &&
+        req.body.statusId
       ) {
         const { id } = req.params;
-        const { name, description } = req.body;
-
+        const { name, lastName, email, password, statusId } = req.body;
         try {
-          const [status] = await Status.update(
-            { id, name, description },
+          const [user] = await User.update(
+            {
+              name,
+              lastName,
+              email,
+              password,
+              statusId,
+            },
             { where: { id } },
           );
+
           return res.send({
-            code: 200,
-            message: 'Status edited with success',
-            content: { status },
+            code: 201,
+            massage: 'User created with success',
+            content: { user },
           });
         } catch (err) {
           logger.error(err);
@@ -122,17 +146,17 @@ const statusController = {
 
       return res.send({
         code: 400,
-        message: 'Bad request',
+        massage: 'Bad request',
       });
     } catch (err) {
       logger.error(err);
       return res.send({
         code: 500,
-        message: 'Error during status editing',
+        message: 'Error while editing user',
         content: { err },
       });
     }
   },
 };
 
-module.exports = statusController;
+module.exports = userController;
