@@ -22,6 +22,7 @@
     "morgan": "^1.9.1",
     "sequelize": "^5.8.12",
     "sqlite": "^3.0.3",
+    "uuid": "^3.3.2",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^3.9.0"
   },
