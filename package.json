@@ -7,6 +7,7 @@
   "license": "MIT",
   "scripts": {
     "start": "NODE_ENV=production node src/index.js",
+    "start:pm2": "pm2 start ecosystem.config.js --env production",
     "dev": "NODE_ENV=development nodemon src/index.js",
     "pretest": "NODE_ENV=test sequelize db:migrate:undo:all && NODE_ENV=test sequelize db:migrate && NODE_ENV=test sequelize db:seed:all",
     "test": "NODE_ENV=test jest",
