@@ -6,12 +6,12 @@
   "author": "Higor Menezes <higormenezes1996@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "prestart": "NODE_ENV=production sequelize db:migrate && NODE_ENV=production sequelize db:seed:all",
     "start": "NODE_ENV=production node src/index.js",
     "dev": "NODE_ENV=development nodemon src/index.js",
     "pretest": "NODE_ENV=test sequelize db:migrate:undo:all && NODE_ENV=test sequelize db:migrate && NODE_ENV=test sequelize db:seed:all",
     "test": "NODE_ENV=test jest",
-    "prettier:fix": "prettier --config ./.prettierrc.json --write  './src/**/*.*'"
+    "prettier:fix": "prettier --config ./.prettierrc.json --write  './src/**/*.*'",
+    "migrate:prod": "NODE_ENV=production sequelize db:migrate && NODE_ENV=production sequelize db:seed:all"
   },
   "dependencies": {
     "bcrypt": "^3.0.6",
