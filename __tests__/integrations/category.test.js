@@ -29,7 +29,7 @@ describe('Category - List', () => {
   });
 });
 
-describe('Category - Create', async () => {
+describe('Category - Create', () => {
   it('should create a new Category when send a post to endpoint /categories with valid request and auth', async () => {
     const user = await factory.create('User');
     const response = await request(app)

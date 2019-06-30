@@ -19,9 +19,6 @@ module.exports = (sequelize, DataType) => {
           if (!newCashFlow.id) {
             newCashFlow.id = uuidv4();
           }
-          if (!newCashFlow.date) {
-            newCashFlow.date = new Date();
-          }
           return newCashFlow;
         },
       },

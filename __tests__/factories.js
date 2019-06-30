@@ -1,6 +1,6 @@
 const faker = require('faker');
 const { factory } = require('factory-girl');
-const { User, Category } = require('../src/app/models');
+const { User, Category, CashFlow } = require('../src/app/models');
 
 factory.define('User', User, {
   name: faker.name.findName(),
@@ -13,6 +13,15 @@ factory.define('User', User, {
 factory.define('Category', Category, {
   name: faker.finance.transactionType(),
   userId: faker.random.number(),
+});
+
+factory.define('CashFlow', CashFlow, {
+  type: faker.random.word(),
+  description: faker.random.words(),
+  date: new Date(),
+  categoryId: faker.random.number(),
+  userId: faker.random.number(),
+  value: faker.random.number(),
 });
 
 module.exports = factory;

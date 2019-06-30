@@ -14,4 +14,5 @@ const dbConfig = {
     underscoredAll: true,
   },
 };
+
 module.exports = dbConfig;
