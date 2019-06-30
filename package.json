@@ -25,6 +25,7 @@
     "helmet": "^3.18.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.9.1",
+    "pg": "^7.11.0",
     "sequelize": "^5.8.12",
     "sqlite": "^3.0.3",
     "uuid": "^3.3.2",

@@ -6,7 +6,7 @@ const statusModel = (Sequelize, DataType) => {
       description: DataType.STRING,
     },
     {
-      tableName: 'Status',
+      tableName: 'status',
     },
   );
 
