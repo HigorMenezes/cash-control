@@ -25,13 +25,10 @@ const basicAuthMiddleware = (req, res, next) => {
       message: 'Unauthorized',
     });
   } catch (err) {
-    logger.error(err);
+    logger.error('basicAuthMiddleware - Error while authenticate user', err);
     return res.send({
       code: 500,
       message: 'Error while authenticate user',
-      content: {
-        err,
-      },
     });
   }
 };

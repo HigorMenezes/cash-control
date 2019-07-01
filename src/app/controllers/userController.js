@@ -141,7 +141,7 @@ const userController = {
 
           return res.send({
             code: 200,
-            massage: 'User created with success',
+            massage: 'User edited with success',
             content: { users },
           });
         } catch (err) {

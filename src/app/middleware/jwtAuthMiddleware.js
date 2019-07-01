@@ -24,7 +24,7 @@ const jwtAuthMiddleware = async (req, res, next) => {
       });
     }
   } catch (err) {
-    logger.error('Error during token validation', err);
+    logger.error('jwtAuthMiddleware - Error during token validation', err);
     return res.send({
       code: 500,
       message: 'Error during token validation',

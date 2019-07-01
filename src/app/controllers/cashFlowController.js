@@ -25,7 +25,7 @@ const whereClauseForReport = req => {
     where.description = description;
   }
   if (categoryId) {
-    where.id = categoryId;
+    where.categoryId = categoryId;
   }
   if (value) {
     where.value = value;
