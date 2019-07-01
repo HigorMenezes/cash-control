@@ -1,6 +1,6 @@
 version: '3'
 services:
-  dev:
+  install:
     image: node:10
     volumes:
       - .:/usr/src/service
