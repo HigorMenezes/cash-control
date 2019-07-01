@@ -2,23 +2,44 @@ const request = require('supertest');
 const app = require('../../src/app');
 const { User } = require('../../src/app/models');
 const factory = require('../factories');
+const basicAuthConfig = require('../../src/configs/basicAuthConfig');
 
 describe('User - List', () => {
   it('should return property content on body when search for all users', async () => {
     const user = await factory.create('User');
-    const response = await request(app).get('/users');
+    const response = await request(app)
+      .get('/users')
+      .auth(basicAuthConfig.username, basicAuthConfig.password);
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('content');
     expect(response.body.code).toBe(200);
     await User.destroy({ where: { id: user.id } });
   });
 
+  it('should not return property content on body when search for all users', async () => {
+    const user = await factory.create('User');
+    const response = await request(app).get('/users');
+    expect(response.status).toBe(200);
+    expect(response.body.code).toBe(401);
+    await User.destroy({ where: { id: user.id } });
+  });
+
   it('should return property content on body when search for one user', async () => {
     const user = await factory.create('User');
-    const response = await request(app).get(`/users/${user.id}`);
+    const response = await request(app)
+      .get(`/users/${user.id}`)
+      .auth(basicAuthConfig.username, basicAuthConfig.password);
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('content');
     expect(response.body.code).toBe(200);
+    await User.destroy({ where: { id: user.id } });
+  });
+
+  it('should not return property content on body when search for one user', async () => {
+    const user = await factory.create('User');
+    const response = await request(app).get(`/users/${user.id}`);
+    expect(response.status).toBe(200);
+    expect(response.body.code).toBe(401);
     await User.destroy({ where: { id: user.id } });
   });
 });
@@ -34,7 +55,7 @@ describe('User - Create', () => {
         password: '123',
         statusId: 100,
       })
-      .auth('admin', 'admin');
+      .auth(basicAuthConfig.username, basicAuthConfig.password);
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('content');
     expect(response.body.code).toBe(201);
@@ -80,7 +101,7 @@ describe('User - Create', () => {
         password: '123',
         statusId: 100,
       })
-      .auth('admin', 'admin');
+      .auth(basicAuthConfig.username, basicAuthConfig.password);
 
     expect(response.status).toBe(200);
     expect(response.body.code).toBe(400);
@@ -107,7 +128,7 @@ describe('User - edit', () => {
         password: '123',
         statusId: 300,
       })
-      .auth('admin', 'admin');
+      .auth(basicAuthConfig.username, basicAuthConfig.password);
     expect(response.status).toBe(200);
     expect(response.body.code).toBe(200);
     await User.destroy({ where: { id: user.id } });
@@ -140,7 +161,7 @@ describe('User - edit', () => {
         email: 'mario@luigi.com',
         password: '123',
       })
-      .auth('admin', 'admin');
+      .auth(basicAuthConfig.username, basicAuthConfig.password);
 
     expect(response.status).toBe(200);
     expect(response.body.code).toBe(400);

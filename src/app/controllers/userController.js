@@ -13,41 +13,45 @@ const userController = {
         req.body.statusId
       ) {
         const { name, lastName, email, password, statusId } = req.body;
-        try {
-          const users = await User.create({
-            name,
-            lastName,
-            email,
-            password,
-            statusId,
-          });
-          delete users.dataValues.passwordHash;
+        const checkUsers = await User.findAll({ where: { email } });
+        if (checkUsers.length === 0) {
+          try {
+            const users = await User.create({
+              name,
+              lastName,
+              email,
+              password,
+              statusId,
+            });
+            delete users.dataValues.passwordHash;
 
-          return res.send({
-            code: 201,
-            massage: 'User created with success',
-            content: { users },
-          });
-        } catch (err) {
-          logger.error('Create - Bad request', err);
-          return res.send({
-            code: 400,
-            massage: 'Bad request',
-            content: { err },
-          });
+            return res.send({
+              code: 201,
+              massage: 'User created with success',
+              content: { users },
+            });
+          } catch (err) {
+            logger.error('Create - Bad request', err);
+            return res.send({
+              code: 400,
+              massage: 'Bad request',
+            });
+          }
         }
+        return res.send({
+          code: 400,
+          massage: `Bad request - email ${email} already used`,
+        });
       }
-
       return res.send({
         code: 400,
-        massage: 'Bad request',
+        massage: 'Bad request - some data are missing',
       });
     } catch (err) {
       logger.error('Create - Error during user creating', err);
       return res.send({
         code: 500,
         message: 'Error during user creating',
-        content: { err },
       });
     }
   },
@@ -67,7 +71,6 @@ const userController = {
       return res.send({
         code: 500,
         message: 'Error during retrieving users',
-        content: { err },
       });
     }
   },
@@ -77,7 +80,7 @@ const userController = {
         const { id } = req.params;
 
         try {
-          const users = await User.findOne({
+          const users = await User.findAll({
             where: { id },
             attributes: { exclude: ['passwordHash'] },
           });
@@ -91,21 +94,18 @@ const userController = {
           return res.send({
             code: 400,
             massage: 'Bad request',
-            content: { err },
           });
         }
       }
-
       return res.send({
         code: 400,
-        message: 'Bad request',
+        message: 'Bad request - some data are missing',
       });
     } catch (err) {
       logger.error('ListById - Error while retrieving user', err);
       return res.send({
         code: 500,
         message: 'Error while retrieving user',
-        content: { err },
       });
     }
   },
@@ -134,7 +134,7 @@ const userController = {
             },
             { where: { id } },
           );
-          const users = await User.findOne({
+          const users = await User.findAll({
             where: { id },
             attributes: { exclude: ['passwordHash'] },
           });
@@ -149,21 +149,18 @@ const userController = {
           return res.send({
             code: 400,
             massage: 'Bad request',
-            content: { err },
           });
         }
       }
-
       return res.send({
         code: 400,
-        massage: 'Bad request',
+        massage: 'Bad request - some data are missing',
       });
     } catch (err) {
       logger.error('Edit - Error while editing user', err);
       return res.send({
         code: 500,
         message: 'Error while editing user',
-        content: { err },
       });
     }
   },

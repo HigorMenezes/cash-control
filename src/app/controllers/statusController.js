@@ -6,34 +6,41 @@ const statusController = {
     try {
       if (req.body && req.body.id && req.body.name && req.body.description) {
         const { id, name, description } = req.body;
-        try {
-          const status = await Status.create({ id, name, description });
+        const checkStatus = await Status.findAll({ where: { id } });
+        if (checkStatus.length === 0) {
+          try {
+            const status = await Status.create({ id, name, description });
 
-          return res.send({
-            code: 201,
-            massage: 'Status created with success',
-            content: { status },
-          });
-        } catch (err) {
-          logger.error('Create - Bad request', err);
-          return res.send({
-            code: 400,
-            massage: 'Bad request',
-            content: { err },
-          });
+            return res.send({
+              code: 201,
+              massage: 'Status created with success',
+              content: { status },
+            });
+          } catch (err) {
+            logger.error('Create - Bad request', err);
+            return res.send({
+              code: 400,
+              massage: 'Bad request',
+            });
+          }
         }
+        return res.send({
+          code: 400,
+          massage: `Bad request - id ${id} already used`,
+          content: {
+            status: checkStatus,
+          },
+        });
       }
-
       return res.send({
         code: 400,
-        massage: 'Bad request',
+        massage: 'Bad request - some data are missing',
       });
     } catch (err) {
       logger.error('Create - Error during status creating', err);
       return res.send({
         code: 500,
         message: 'Error during status creating',
-        content: { err },
       });
     }
   },
@@ -51,7 +58,6 @@ const statusController = {
       return res.send({
         code: 500,
         message: 'Error during get status',
-        content: { err },
       });
     }
   },
@@ -61,7 +67,7 @@ const statusController = {
         const { id } = req.params;
 
         try {
-          const status = await Status.findOne({ where: { id } });
+          const status = await Status.findAll({ where: { id } });
           return res.send({
             code: 200,
             message: 'Status recovered with success',
@@ -72,7 +78,6 @@ const statusController = {
           return res.send({
             code: 400,
             massage: 'Bad request',
-            content: { err },
           });
         }
       }
@@ -86,7 +91,6 @@ const statusController = {
       return res.send({
         code: 500,
         message: 'Error during get status',
-        content: { err },
       });
     }
   },
@@ -102,7 +106,7 @@ const statusController = {
 
         try {
           await Status.update({ id, name, description }, { where: { id } });
-          const status = await Status.findOne({ where: { id } });
+          const status = await Status.findAll({ where: { id } });
           return res.send({
             code: 200,
             message: 'Status edited with success',
@@ -113,21 +117,18 @@ const statusController = {
           return res.send({
             code: 400,
             massage: 'Bad request',
-            content: { err },
           });
         }
       }
-
       return res.send({
         code: 400,
-        message: 'Bad request',
+        message: 'Bad request - some data are missing',
       });
     } catch (err) {
       logger.error('Edit - Error during status editing', err);
       return res.send({
         code: 500,
         message: 'Error during status editing',
-        content: { err },
       });
     }
   },

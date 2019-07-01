@@ -7,7 +7,7 @@ const sessionController = {
       if (req.body && req.body.email && req.body.password) {
         const { email, password } = req.body;
         const user = await User.findOne({ where: { email } });
-        if (user !== undefined && user !== null) {
+        if (user) {
           if (await user.checkPassword(password)) {
             return res.send({
               code: 200,

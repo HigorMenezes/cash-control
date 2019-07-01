@@ -1,20 +1,41 @@
 const request = require('supertest');
 const app = require('../../src/app');
 const { Status } = require('../../src/app/models');
+const basicAuthConfig = require('../../src/configs/basicAuthConfig');
 
 describe('Status - List', () => {
   it('should return property content on body when search for all status', async () => {
-    const response = await request(app).get('/status');
+    const response = await request(app)
+      .get('/status')
+      .auth(basicAuthConfig.username, basicAuthConfig.password);
+
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('content');
     expect(response.body.code).toBe(200);
   });
 
+  it('should not return property content on body when search for all status', async () => {
+    const response = await request(app).get('/status');
+
+    expect(response.status).toBe(200);
+    expect(response.body.code).toBe(401);
+  });
+
   it('should return property content on body when search for one status', async () => {
-    const response = await request(app).get('/status/100');
+    const response = await request(app)
+      .get('/status/100')
+      .auth(basicAuthConfig.username, basicAuthConfig.password);
+
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('content');
     expect(response.body.code).toBe(200);
+  });
+
+  it('should not return property content on body when search for one status', async () => {
+    const response = await request(app).get('/status/100');
+
+    expect(response.status).toBe(200);
+    expect(response.body.code).toBe(401);
   });
 });
 
@@ -27,7 +48,7 @@ describe('Status - Create', () => {
         name: '123',
         description: '123',
       })
-      .auth('admin', 'admin');
+      .auth(basicAuthConfig.username, basicAuthConfig.password);
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('content');
@@ -55,7 +76,7 @@ describe('Status - Create', () => {
         name: '123',
         description: '123',
       })
-      .auth('admin', 'admin');
+      .auth(basicAuthConfig.username, basicAuthConfig.password);
 
     expect(response.status).toBe(200);
     expect(response.body.code).toBe(400);
@@ -71,7 +92,7 @@ describe('Status - edit', () => {
         name: 'active',
         description: 'indicates that is active',
       })
-      .auth('admin', 'admin');
+      .auth(basicAuthConfig.username, basicAuthConfig.password);
 
     expect(response.status).toBe(200);
     expect(response.body.code).toBe(200);
@@ -96,7 +117,7 @@ describe('Status - edit', () => {
       .send({
         description: 'indicates that is active',
       })
-      .auth('admin', 'admin');
+      .auth(basicAuthConfig.username, basicAuthConfig.password);
 
     expect(response.status).toBe(200);
     expect(response.body.code).toBe(400);

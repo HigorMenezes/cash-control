@@ -100,7 +100,6 @@ const userController = {
           return res.send({
             code: 400,
             massage: 'Bad request',
-            content: { err },
           });
         }
       }
@@ -114,7 +113,6 @@ const userController = {
       return res.send({
         code: 500,
         message: 'Error during cashIn creating',
-        content: { err },
       });
     }
   },
@@ -159,7 +157,6 @@ const userController = {
             return res.send({
               code: 400,
               massage: 'Bad request',
-              content: { err },
             });
           }
         }
@@ -175,11 +172,10 @@ const userController = {
         massage: 'Bad request',
       });
     } catch (err) {
-      logger.error('createCashOut - Error during cashOut creating', err);
+      logger.error('createCashOut - Error during createCashOut creating', err);
       return res.send({
         code: 500,
         message: 'Error during cashOut creating',
-        content: { err },
       });
     }
   },
@@ -216,7 +212,6 @@ const userController = {
       return res.send({
         code: 500,
         message: 'Error during retrieving users',
-        content: { err },
       });
     }
   },
@@ -253,7 +248,6 @@ const userController = {
       return res.send({
         code: 500,
         message: 'Error during retrieving users',
-        content: { err },
       });
     }
   },

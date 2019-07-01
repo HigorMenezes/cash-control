@@ -20,7 +20,6 @@ const categoryController = {
           return res.send({
             code: 400,
             massage: 'Bad request',
-            content: { err },
           });
         }
       }
@@ -34,7 +33,6 @@ const categoryController = {
       return res.send({
         code: 500,
         message: 'Error during category creating',
-        content: { err },
       });
     }
   },
@@ -52,7 +50,6 @@ const categoryController = {
           content: { categories },
         });
       }
-
       logger.error('ListAll - Bad request');
       return res.send({
         code: 400,
@@ -63,7 +60,6 @@ const categoryController = {
       return res.send({
         code: 500,
         message: 'Error during get categories',
-        content: { err },
       });
     }
   },
@@ -74,7 +70,7 @@ const categoryController = {
         const { userId } = req;
 
         try {
-          const categories = await Category.findOne({ where: { id, userId } });
+          const categories = await Category.findAll({ where: { id, userId } });
           return res.send({
             code: 200,
             message: 'Category recovered with success',
@@ -85,7 +81,6 @@ const categoryController = {
           return res.send({
             code: 400,
             massage: 'Bad request',
-            content: { err },
           });
         }
       }
@@ -100,7 +95,6 @@ const categoryController = {
       return res.send({
         code: 500,
         message: 'Error during get category',
-        content: { err },
       });
     }
   },
@@ -117,7 +111,7 @@ const categoryController = {
 
         try {
           await Category.update({ name }, { where: { id, userId } });
-          const categories = await Category.findOne({ where: { id, userId } });
+          const categories = await Category.findAll({ where: { id, userId } });
           return res.send({
             code: 200,
             message: 'Category edited with success',
@@ -128,21 +122,19 @@ const categoryController = {
           return res.send({
             code: 400,
             massage: 'Bad request',
-            content: { err },
           });
         }
       }
 
       return res.send({
         code: 400,
-        message: 'Bad request',
+        message: 'Bad request - some data are missing',
       });
     } catch (err) {
       logger.error('Edit - Error during category editing', err);
       return res.send({
         code: 500,
         message: 'Error during category editing',
-        content: { err },
       });
     }
   },
